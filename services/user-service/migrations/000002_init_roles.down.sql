@@ -1,0 +1,1 @@
+DROP TABLE ROLE IF EXISTS roles;
