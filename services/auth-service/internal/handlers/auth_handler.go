@@ -52,3 +52,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"token": token})
 }
+
+func (h *AuthHandler) Logout(c *fiber.Ctx) error {
+	return h.AuthService.Logout(c)
+}

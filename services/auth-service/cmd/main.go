@@ -12,9 +12,14 @@ import (
 )
 
 func main() {
-	dbUrl := os.Getenv("DATABASE_URL")
-	jwtSecret := os.Getenv("JWT_SECRET")
-
+	dbUrl := getEnv("DATABASE_URL", "postgres://doadmin:AVNS_cSBdfrfFUA3x699eaiP@janis-software-postgres-database-do-user-17670141-0.k.db.ondigitalocean.com:25060/erp_user_service?sslmode=require")
+	jwtSecret := getEnv("JWT_SECRET", "jwt_supersecret")
+	if dbUrl == "" {
+		log.Fatal("Missing DB URL")
+	}
+	if jwtSecret == "" {
+		log.Fatal("Missing JWT Secret")
+	}
 	if dbUrl == "" || jwtSecret == "" {
 		log.Fatal("Missing environment variables")
 	}
@@ -34,8 +39,15 @@ func main() {
 	// POST Requests
 	api.Post("/signup", authHandler.Signup)
 	api.Post("/login", authHandler.Login)
-
+	api.Post("/logout", authHandler.Logout)
 	log.Println("Auth Service running on port 8080") // Logs a message
 	log.Fatal(app.Listen(":8080"))                   // Starts the Fiber application to listen for incoming HTTP connections on port 8080
 	// app.Listen returns an error if the server fails (e.g. port is already in use) and log.Fatal ensures the error is printed and the program terminates if listening fails
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }

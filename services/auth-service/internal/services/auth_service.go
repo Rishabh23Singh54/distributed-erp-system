@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 
-	"github.com/Rishabh23Singh54/distributed-erp-system/services/auth-service/internal/models"
+	"github.com/Rishabh23Singh54/distributed-erp-system/pkg/models"
 	"github.com/Rishabh23Singh54/distributed-erp-system/services/auth-service/internal/repository"
 	"github.com/Rishabh23Singh54/distributed-erp-system/services/auth-service/internal/utils"
+	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
 
@@ -36,7 +37,7 @@ func (s *AuthService) Signup(ctx context.Context, name, email, password, roleID 
 		return "", err
 	}
 
-	user := &models.User{
+	user := models.User{
 		ID:       uuid.New().String(),
 		Name:     name,
 		Email:    email,
@@ -46,7 +47,7 @@ func (s *AuthService) Signup(ctx context.Context, name, email, password, roleID 
 	}
 
 	// Save user
-	err = s.repo.CreateUser(ctx, user)
+	err = s.repo.CreateUser(ctx, &user)
 	if err != nil {
 		return "", err
 	}
@@ -78,4 +79,10 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (string
 	}
 
 	return token, nil
+}
+
+func (s *AuthService) Logout(c *fiber.Ctx) error {
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Successfully logged out. Please discard your token.",
+	})
 }

@@ -1,0 +1,9 @@
+// go work init ./services/auth-service ./services/user-service
+// go work use ./pkg
+// go work sync
+go 1.24.5
+
+use (
+	./services/auth-service
+	./services/user-service
+)

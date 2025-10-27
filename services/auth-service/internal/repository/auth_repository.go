@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/Rishabh23Singh54/distributed-erp-system/services/auth-service/internal/models"
+	"github.com/Rishabh23Singh54/distributed-erp-system/pkg/models"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

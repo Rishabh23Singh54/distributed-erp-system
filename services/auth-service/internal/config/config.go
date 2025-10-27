@@ -1,25 +1,34 @@
 package config
 
 import (
-	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	DBUrl      string
-	JWTSecret  string
-	ServerPort string
+	Port           string
+	DBUrl          string
+	AuthServiceURL string
+	UserServiceURL string
+	JWTSecret      string
 }
 
 func LoadConfig() *Config {
-	cfg := &Config{
-		DBUrl:      os.Getenv("DATABASE_URL"),
-		JWTSecret:  os.Getenv("JWT_SECRET"),
-		ServerPort: os.Getenv("PORT"),
-	}
+	_ = godotenv.Load(".env")
 
-	if cfg.DBUrl == "" || cfg.JWTSecret == "" {
-		log.Fatalf("Missing environment variables")
+	return &Config{
+		Port:           getEnv("PORT", "8000"),
+		DBUrl:          getEnv("DB_URL", ""),
+		AuthServiceURL: getEnv("AUTH_SERVICE_URL", ""),
+		UserServiceURL: getEnv("USER_SERVICE_URL", ""),
+		JWTSecret:      getEnv("JWT_SECRET", "secret"),
 	}
-	return cfg
+}
+
+func getEnv(key, fallback string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return fallback
 }

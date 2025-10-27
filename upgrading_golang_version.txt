@@ -1,0 +1,215 @@
+Perfect — since you’re using **WSL (Linux)**, upgrading Go is even easier 🚀
+Here’s exactly how to do it safely and cleanly:
+
+---
+
+## 🧩 **Step-by-step: Upgrade Go in WSL**
+
+### 1️⃣ Remove your old Go installation
+
+Run:
+
+```bash
+sudo rm -rf /usr/local/go
+```
+
+(This removes the existing Go version completely.)
+
+---
+
+### 2️⃣ Download the latest Go tarball
+
+Go to the [official Go download page](https://go.dev/dl/) and copy the Linux tarball link for **1.24.5**.
+Then run:
+
+```bash
+wget https://go.dev/dl/go1.24.5.linux-amd64.tar.gz
+```
+
+---
+
+### 3️⃣ Extract it to `/usr/local`
+
+```bash
+sudo tar -C /usr/local -xzf go1.24.5.linux-amd64.tar.gz
+```
+
+---
+
+### 4️⃣ Update your PATH
+
+Add this line to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
+
+```bash
+export PATH=$PATH:/usr/local/go/bin
+```
+
+Then apply changes:
+
+```bash
+source ~/.bashrc
+```
+
+---
+
+### 5️⃣ Verify installation
+
+Check version:
+
+```bash
+go version
+```
+
+You should see:
+
+```
+go version go1.24.5 linux/amd64
+```
+
+---
+
+### 6️⃣ (Optional) Set your workspace path
+
+If not already set, you can add:
+
+```bash
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+```
+
+---
+
+### 7️⃣ Re-run your project
+
+```bash
+cd /mnt/g/Janis-Distributed-ERP-System/services/user-service
+go mod tidy
+go run cmd/main.go
+```
+
+---
+
+### ✅ Done
+
+Your Go toolchain will now support:
+
+* `toolchain` directive in `go.mod`
+* `go 1.23.0` or higher syntax
+* Full compatibility with your project dependencies
+
+---
+
+Would you like me to give you a **single copy-paste shell script** that runs all these steps automatically?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Perfect progress ✅ — you installed Go 1.24.5 successfully, but your **shell is still picking up the old Go (1.18.1)** from another path that’s higher in your `$PATH`.
+
+Let’s fix that 👇
+
+---
+
+## 🧩 Step 1 — Find where the old Go is
+
+Run:
+
+```bash
+which go
+```
+
+You’ll probably see something like:
+
+```
+/usr/bin/go
+```
+
+That means Ubuntu’s package manager installed Go 1.18 there.
+
+---
+
+## 🧩 Step 2 — Confirm the new Go exists
+
+Check:
+
+```bash
+ls /usr/local/go/bin/go
+```
+
+If that prints a path (like `/usr/local/go/bin/go`), the new Go 1.24.5 is correctly extracted.
+
+---
+
+## 🧩 Step 3 — Fix your PATH (temporarily)
+
+Try this to override the old one for your current shell session:
+
+```bash
+export PATH=/usr/local/go/bin:$PATH
+```
+
+Then confirm:
+
+```bash
+go version
+```
+
+✅ You should now see:
+
+```
+go version go1.24.5 linux/amd64
+```
+
+---
+
+## 🧩 Step 4 — Make it permanent
+
+Add this line **at the end** of your `~/.bashrc` file:
+
+```bash
+export PATH=/usr/local/go/bin:$PATH
+```
+
+Then reload:
+
+```bash
+source ~/.bashrc
+```
+
+---
+
+## 🧩 (Optional Cleanup) — Remove old Go (apt package)
+
+If you want to remove the old Go entirely:
+
+```bash
+sudo apt remove golang-go -y
+sudo apt autoremove -y
+```
+
+Then verify again:
+
+```bash
+go version
+```
+
+It should now permanently show:
+
+```
+go version go1.24.5 linux/amd64
+```
+
+---
+
+Would you like me to give you a **one-line command** to fix the PATH and remove the old Go in one go?
+
